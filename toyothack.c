@@ -188,7 +188,6 @@ static int net_init(char *ifname)
 		exit(1);
 	}
 
-	addr.can_family = AF_CAN;
 	memset(&ifr.ifr_name, 0, sizeof(ifr.ifr_name));
 	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
 	if (ioctl(sk, SIOCGIFINDEX, &ifr) < 0) {
@@ -196,6 +195,8 @@ static int net_init(char *ifname)
 		exit(1);
 	}
 
+	memset(&addr, 0, sizeof(addr));
+	addr.can_family = AF_CAN;
 	addr.can_ifindex = ifr.ifr_ifindex;
 	if (bind(sk, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
 		perror("bind");
